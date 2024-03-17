@@ -17,7 +17,7 @@ export default forwardRef(function PhotoPreview(props: PhotoPreviewProps, ref: R
     const isoSpeed = props.tags.ISOSpeedRatings?.description ?? ''
 
     return (
-        <div className='max-w-3xl border border-sky-500 p-8 bg-white' ref={ref}>
+        <div className='max-w-3xl border border-black p-8 bg-white' ref={ref}>
             <img className='w-full' src={URL.createObjectURL(props.file)} alt=""/>
             <div className='mt-6 text-center font-extralight text-lg leading-relaxed'>
                 <h3>Shot on <strong className='font-bold'>{host}</strong></h3>
