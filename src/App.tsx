@@ -1,8 +1,7 @@
 import {ChangeEvent, useRef, useState} from 'react'
 import * as ExifReader from 'exifreader'
-import {toJpeg} from 'html-to-image'
 import heic2any from 'heic2any'
-
+import domtoimage from 'dom-to-image'
 
 import 'normalize.css'
 
@@ -23,7 +22,7 @@ function App() {
             const tags = await ExifReader.load(file)
 
             if (file.name.toLowerCase().endsWith('.heic') ||
-                file.name.toLowerCase().endsWith('.heif')){
+                file.name.toLowerCase().endsWith('.heif')) {
                 const blob = new Blob([file])
                 const jpegBlob: any = await heic2any({
                     blob,
@@ -31,7 +30,7 @@ function App() {
                 })
 
                 jpegBlob.lastModifiedDate = new Date()
-                jpegBlob.name = `${file.name}.jpg`;
+                jpegBlob.name = `${file.name}.jpg`
 
                 setPhotoFile(jpegBlob as File)
             } else {
@@ -45,7 +44,7 @@ function App() {
 
     const onDownloadClicked = () => {
         if (previewRef.current != null) {
-            toJpeg(previewRef.current, {cacheBust: false})
+            domtoimage.toJpeg(previewRef.current, {cacheBust: false})
                 .then((dataUrl) => {
                     const link = document.createElement("a")
                     link.download = `framed-${photoFile?.name}`
