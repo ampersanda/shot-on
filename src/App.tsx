@@ -1,6 +1,6 @@
 import {ChangeEvent, useRef, useState} from 'react'
 import * as ExifReader from 'exifreader'
-import {toPng} from 'html-to-image'
+import {toJpeg} from 'html-to-image'
 import heic2any from 'heic2any'
 
 
@@ -30,7 +30,7 @@ function App() {
                     toType: "image/jpeg",
                 })
 
-                jpegBlob.lastModifiedDate = new Date();
+                jpegBlob.lastModifiedDate = new Date()
                 jpegBlob.name = `${file.name}.jpg`;
 
                 setPhotoFile(jpegBlob as File)
@@ -45,7 +45,7 @@ function App() {
 
     const onDownloadClicked = () => {
         if (previewRef.current != null) {
-            toPng(previewRef.current, {cacheBust: false})
+            toJpeg(previewRef.current, {cacheBust: false})
                 .then((dataUrl) => {
                     const link = document.createElement("a")
                     link.download = `framed-${photoFile?.name}`
