@@ -29,7 +29,7 @@ function App() {
                 if (canvasWrapperRef.current == null) return
 
                 canvasWrapperRef.current.innerHTML = ''
-                canvasWrapperRef.current?.classList.add('border', 'border-black')
+                canvas?.classList.add('border', 'border-black')
                 canvasWrapperRef.current.appendChild(canvas)
             });
         }
