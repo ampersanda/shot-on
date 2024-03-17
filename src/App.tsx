@@ -32,7 +32,9 @@ function App() {
                     const link = document.createElement("a");
                     link.download = `framed-${photoFile?.name}`;
                     link.href = dataUrl;
+                    document.body.appendChild(link);
                     link.click();
+                    document.body.removeChild(link);
                 })
                 .catch((err) => {
                     console.log(err);
