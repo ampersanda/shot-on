@@ -29,11 +29,11 @@ function App() {
                 canvasWrapperRef.current.appendChild(canvas)
             });
         }
-
-
-    }, [photoFile, photoTags]);
+    }, [photoFile]);
 
     const onFilePickerChanged = async (e: ChangeEvent<HTMLInputElement>) => {
+        print(e.target?.files);
+
         if (e.target?.files?.length) {
             const file = e.target.files[0]
             const tags = await ExifReader.load(file)
@@ -77,16 +77,9 @@ function App() {
     return (
         <>
             <PhotoPicker onFileChanged={onFilePickerChanged}/>
-
-            {showPreview ?
-                <button onClick={onDownloadClicked} type="button" className="bg-slate-400">Download Image</button>
-
-                : <></>}
-
-            {showPreview && !showCanvas ?
-                <PhotoPreview file={photoFile} tags={photoTags} ref={previewRef}/>
-                : <></>}
-
+            {showPreview &&
+                <button onClick={onDownloadClicked} type="button" className="bg-slate-400">Download Image</button>}
+            {showPreview && !showCanvas && <PhotoPreview file={photoFile} tags={photoTags} ref={previewRef}/>}
             <div ref={canvasWrapperRef}></div>
         </>
     )
