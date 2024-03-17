@@ -16,7 +16,7 @@ function App() {
 
     const [showCanvas, setShowCanvas] = useState<boolean>(false)
 
-    const showPreview = photoFile != null && photoTags != null
+    const showPreview = photoFile != null && photoTags != null && !showCanvas
 
     const previewRef = useRef<HTMLDivElement>(null)
     const canvasWrapperRef = useRef<HTMLDivElement>(null)
@@ -24,17 +24,22 @@ function App() {
     useEffect(() => {
         if (previewRef.current != null) {
             html2canvas(previewRef.current).then(canvas => {
+                setShowCanvas(true)
+
                 if (canvasWrapperRef.current == null) return
 
                 canvasWrapperRef.current.innerHTML = ''
+                canvasWrapperRef.current?.classList.add('border', 'border-black')
                 canvasWrapperRef.current.appendChild(canvas)
-
-                setShowCanvas(true)
             });
         }
     }, [photoFile]);
 
     const onFilePickerChanged = async (e: ChangeEvent<HTMLInputElement>) => {
+        setPhotoFile(null)
+        setPhotoTags(null)
+        setShowCanvas(false)
+
         if (e.target?.files?.length) {
             const file = e.target.files[0]
             const tags = await ExifReader.load(file)
@@ -44,7 +49,7 @@ function App() {
                 const blob = new Blob([file])
                 const jpegBlob: any = await heic2any({
                     blob,
-                    toType: "image/jpeg",
+                    toType: 'image/jpeg',
                 })
 
                 jpegBlob.lastModifiedDate = new Date()
@@ -65,7 +70,7 @@ function App() {
         const canvas = canvasWrapperRef.current.querySelector('canvas')
 
         if (canvas != null) {
-            const link = document.createElement("a")
+            const link = document.createElement('a')
             link.download = `framed-${photoFile?.name}`
             link.href = canvas.toDataURL()
             document.body.appendChild(link)
@@ -77,9 +82,9 @@ function App() {
     return (
         <>
             <PhotoPicker onFileChanged={onFilePickerChanged}/>
-            {showPreview &&
+            {showCanvas &&
                 <button onClick={onDownloadClicked} type="button" className="bg-slate-400">Download Image</button>}
-            {showPreview && !showCanvas && <PhotoPreview file={photoFile} tags={photoTags} ref={previewRef}/>}
+            {showPreview && <PhotoPreview file={photoFile} tags={photoTags} ref={previewRef}/>}
             <div ref={canvasWrapperRef}></div>
         </>
     )
