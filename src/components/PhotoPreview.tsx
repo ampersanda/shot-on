@@ -19,9 +19,9 @@ export default forwardRef(function PhotoPreview(props: PhotoPreviewProps, ref: R
     return (
         <div className='max-w-3xl border border-black p-8 bg-white' ref={ref}>
             <img className='w-full' src={URL.createObjectURL(props.file)} alt=""/>
-            <div className='mt-6 text-center font-extralight text-lg leading-relaxed'>
+            <div className='mt-6 text-center font-extralight text-lg leading-loose'>
                 <h3>Shot on <strong className='font-bold'>{host}</strong></h3>
-                <p>
+                <p className="text-xs">
                     <span className='mr-2'>{focalLength}mm</span>
                     {
                         fNumber ?
