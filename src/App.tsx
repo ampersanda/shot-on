@@ -1,20 +1,37 @@
-import {ChangeEvent, useRef, useState} from 'react'
+import {ChangeEvent, useEffect, useRef, useState} from 'react'
 import * as ExifReader from 'exifreader'
 import heic2any from 'heic2any'
-import domtoimage from 'dom-to-image'
 
 import 'normalize.css'
 
 import PhotoPreview from './components/PhotoPreview.tsx'
 import PhotoPicker from './components/PhotoPicker.tsx'
+import html2canvas from "html2canvas";
 
 function App() {
     const [photoFile, setPhotoFile] = useState<null | File>(null)
     const [photoTags, setPhotoTags] = useState<null | ExifReader.Tags>(null)
+    const [showCanvas, setShowCanvas] = useState<boolean>(false)
 
     const showPreview = photoFile != null && photoTags != null
 
     const previewRef = useRef<HTMLDivElement>(null)
+    const canvasWrapperRef = useRef<HTMLDivElement>(null)
+
+    useEffect(() => {
+        if (previewRef.current != null) {
+            html2canvas(previewRef.current).then(canvas => {
+                setShowCanvas(true)
+
+                if (canvasWrapperRef.current == null) return
+
+                canvasWrapperRef.current.innerHTML = ''
+                canvasWrapperRef.current.appendChild(canvas)
+            });
+        }
+
+
+    }, [photoFile, photoTags]);
 
     const onFilePickerChanged = async (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target?.files?.length) {
@@ -43,19 +60,17 @@ function App() {
     }
 
     const onDownloadClicked = () => {
-        if (previewRef.current != null) {
-            domtoimage.toJpeg(previewRef.current, {cacheBust: false})
-                .then((dataUrl) => {
-                    const link = document.createElement("a")
-                    link.download = `framed-${photoFile?.name}`
-                    link.href = dataUrl
-                    document.body.appendChild(link)
-                    link.click()
-                    document.body.removeChild(link)
-                })
-                .catch((err) => {
-                    console.log(err)
-                });
+        if (canvasWrapperRef.current == null) return
+
+        const canvas = canvasWrapperRef.current.querySelector('canvas')
+
+        if (canvas != null) {
+            const link = document.createElement("a")
+            link.download = `framed-${photoFile?.name}`
+            link.href = canvas.toDataURL()
+            document.body.appendChild(link)
+            link.click()
+            document.body.removeChild(link)
         }
     }
 
@@ -68,9 +83,11 @@ function App() {
 
                 : <></>}
 
-            {showPreview ?
+            {showPreview && !showCanvas ?
                 <PhotoPreview file={photoFile} tags={photoTags} ref={previewRef}/>
                 : <></>}
+
+            <div ref={canvasWrapperRef}></div>
         </>
     )
 }
