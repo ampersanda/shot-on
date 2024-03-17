@@ -10,7 +10,7 @@ export default function PhotoPicker(props: PhotoPickerProps) {
             <label htmlFor="photoFile"></label>
             <input type="file"
                    onChange={props.onFileChanged}
-                   accept="image/*"
+                   accept="image/*,.heic,.heif"
                    id="photoFile"/>
         </>
     )

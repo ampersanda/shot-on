@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "exifreader": "^4.21.1",
+    "heic2any": "^0.0.4",
     "html-to-image": "^1.11.11",
     "normalize.css": "^8.0.1",
     "react": "^18.2.0",

@@ -1,26 +1,44 @@
 import {ChangeEvent, useRef, useState} from 'react'
-import * as ExifReader from 'exifreader';
-import {toPng} from 'html-to-image';
+import * as ExifReader from 'exifreader'
+import {toPng} from 'html-to-image'
+import heic2any from 'heic2any'
+
 
 import 'normalize.css'
 
-import PhotoPreview from './components/PhotoPreview.tsx';
-import PhotoPicker from './components/PhotoPicker.tsx';
+import PhotoPreview from './components/PhotoPreview.tsx'
+import PhotoPicker from './components/PhotoPicker.tsx'
 
 function App() {
     const [photoFile, setPhotoFile] = useState<null | File>(null)
     const [photoTags, setPhotoTags] = useState<null | ExifReader.Tags>(null)
 
-    const showPreview = photoFile != null && photoTags != null;
+    const showPreview = photoFile != null && photoTags != null
 
     const previewRef = useRef<HTMLDivElement>(null)
 
     const onFilePickerChanged = async (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target?.files?.length) {
-            const file = e.target.files[0];
-            const tags = await ExifReader.load(file);
+            const file = e.target.files[0]
+            const tags = await ExifReader.load(file)
 
-            setPhotoFile(file)
+            if (file.name.toLowerCase().endsWith('.heic') ||
+                file.name.toLowerCase().endsWith('.heif')){
+                const blob = new Blob([file])
+                const jpegBlob: any = await heic2any({
+                    blob,
+                    toType: "image/jpeg",
+                })
+
+                jpegBlob.lastModifiedDate = new Date();
+                jpegBlob.name = file.name;
+
+                setPhotoFile(jpegBlob as File)
+            } else {
+                setPhotoFile(file)
+            }
+
+
             setPhotoTags(tags)
         }
     }
@@ -29,15 +47,15 @@ function App() {
         if (previewRef.current != null) {
             toPng(previewRef.current, {cacheBust: false})
                 .then((dataUrl) => {
-                    const link = document.createElement("a");
-                    link.download = `framed-${photoFile?.name}`;
-                    link.href = dataUrl;
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
+                    const link = document.createElement("a")
+                    link.download = `framed-${photoFile?.name}`
+                    link.href = dataUrl
+                    document.body.appendChild(link)
+                    link.click()
+                    document.body.removeChild(link)
                 })
                 .catch((err) => {
-                    console.log(err);
+                    console.log(err)
                 });
         }
     }
