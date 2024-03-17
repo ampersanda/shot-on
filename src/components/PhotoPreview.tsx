@@ -12,7 +12,7 @@ export default forwardRef(function PhotoPreview(props: PhotoPreviewProps, ref: R
 
     const host = props.tags.HostComputer?.description ??
     makerModel.length > 0 ? makerModel.join(' ') :
-        props.tags['Device Manufacturer'].description ?? ''
+        props.tags['Device Manufacturer']?.description ?? ''
 
     const focalLength = props.tags.FocalLengthIn35mmFilm?.description.toString() ?? ''
     const fNumber = props.tags.FNumber?.description ?? ''
