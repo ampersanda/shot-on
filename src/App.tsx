@@ -32,8 +32,6 @@ function App() {
     }, [photoFile]);
 
     const onFilePickerChanged = async (e: ChangeEvent<HTMLInputElement>) => {
-        print(e.target?.files);
-
         if (e.target?.files?.length) {
             const file = e.target.files[0]
             const tags = await ExifReader.load(file)
@@ -53,7 +51,6 @@ function App() {
             } else {
                 setPhotoFile(file)
             }
-
 
             setPhotoTags(tags)
         }
