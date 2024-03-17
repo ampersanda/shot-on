@@ -12,12 +12,12 @@ export default forwardRef(function PhotoPreview(props: PhotoPreviewProps, ref: R
 
     const host = props.tags.HostComputer?.description ??
     makerModel.length > 0 ? makerModel.join(' ') :
-        props.tags['Device Manufacturer']?.description ?? ''
+        props.tags['Device Manufacturer']?.description
 
-    const focalLength = props.tags.FocalLengthIn35mmFilm?.description.toString() ?? ''
-    const fNumber = props.tags.FNumber?.description ?? ''
-    const shutterSpeed = props.tags.ShutterSpeedValue?.description ?? ''
-    const isoSpeed = props.tags.ISOSpeedRatings?.description ?? ''
+    const focalLength = props.tags.FocalLengthIn35mmFilm?.description?.toString()
+    const fNumber = props.tags.FNumber?.description
+    const shutterSpeed = props.tags.ShutterSpeedValue?.description
+    const isoSpeed = props.tags.ISOSpeedRatings?.description
 
     return (
         <div className='max-w-3xl border border-black p-8 bg-white' ref={ref}>
