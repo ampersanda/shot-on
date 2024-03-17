@@ -22,9 +22,6 @@ function App() {
 
             setPhotoFile(file)
             setPhotoTags(tags)
-
-            console.log(file)
-            console.log(tags)
         }
     }
 
