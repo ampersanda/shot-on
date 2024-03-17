@@ -31,7 +31,7 @@ function App() {
                 })
 
                 jpegBlob.lastModifiedDate = new Date();
-                jpegBlob.name = file.name;
+                jpegBlob.name = `${file.name}.jpg`;
 
                 setPhotoFile(jpegBlob as File)
             } else {
