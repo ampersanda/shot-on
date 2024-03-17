@@ -24,17 +24,19 @@ function App() {
     useEffect(() => {
         if (previewRef.current != null) {
             html2canvas(previewRef.current).then(canvas => {
-                setShowCanvas(true)
-
                 if (canvasWrapperRef.current == null) return
 
                 canvasWrapperRef.current.innerHTML = ''
                 canvasWrapperRef.current.appendChild(canvas)
+
+                setShowCanvas(true)
             });
         }
     }, [photoFile]);
 
     const onFilePickerChanged = async (e: ChangeEvent<HTMLInputElement>) => {
+        setShowCanvas(false)
+
         if (e.target?.files?.length) {
             const file = e.target.files[0]
             const tags = await ExifReader.load(file)
@@ -79,8 +81,9 @@ function App() {
             <PhotoPicker onFileChanged={onFilePickerChanged}/>
             {showPreview &&
                 <button onClick={onDownloadClicked} type="button" className="bg-slate-400">Download Image</button>}
-            {showPreview && !showCanvas && <PhotoPreview file={photoFile} tags={photoTags} ref={previewRef}/>}
-            <div ref={canvasWrapperRef}></div>
+            {showPreview && !showCanvas ?
+                <PhotoPreview file={photoFile} tags={photoTags} ref={previewRef}/>
+                : <div ref={canvasWrapperRef}></div>}
         </>
     )
 }
