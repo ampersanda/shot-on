@@ -13,7 +13,7 @@ function App() {
 
     const showPreview = photoFile != null && photoTags != null;
 
-    const previewRef = useRef<HTMLButtonElement>(null)
+    const previewRef = useRef<HTMLDivElement>(null)
 
     const onFilePickerChanged = async (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target?.files?.length) {
