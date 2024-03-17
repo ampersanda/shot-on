@@ -10,7 +10,10 @@ import html2canvas from "html2canvas";
 
 function App() {
     const [photoFile, setPhotoFile] = useState<null | File>(null)
+
+    // TODO(lucky): cleanup photoTags
     const [photoTags, setPhotoTags] = useState<null | ExifReader.Tags>(null)
+
     const [showCanvas, setShowCanvas] = useState<boolean>(false)
 
     const showPreview = photoFile != null && photoTags != null

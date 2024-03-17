@@ -7,12 +7,13 @@ type PhotoPreviewProps = React.HTMLAttributes<HTMLDivElement> & {
 }
 
 export default forwardRef(function PhotoPreview(props: PhotoPreviewProps, ref: React.ForwardedRef<HTMLDivElement>) {
-    console.log(props.tags)
+    const makerModel = [props.tags.Make?.description, props.tags.Model?.description]
+        .filter((host) => host != undefined)
 
     const host = props.tags.HostComputer?.description ??
-        [props.tags.Make?.description, props.tags.Model?.description]
-            .filter((host) => host != null)
-            .join(' ') ?? props.tags['Device Manufacturer'].description ?? ''
+    makerModel.length > 0 ? makerModel.join(' ') :
+        props.tags['Device Manufacturer'].description ?? ''
+
     const focalLength = props.tags.FocalLengthIn35mmFilm?.description.toString() ?? ''
     const fNumber = props.tags.FNumber?.description ?? ''
     const shutterSpeed = props.tags.ShutterSpeedValue?.description ?? ''
