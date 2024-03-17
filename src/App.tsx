@@ -86,6 +86,8 @@ function App() {
                 <button onClick={onDownloadClicked} type="button" className="bg-slate-400">Download Image</button>}
             {showPreview && <PhotoPreview file={photoFile} tags={photoTags} ref={previewRef}/>}
             <div ref={canvasWrapperRef}></div>
+            {showCanvas &&
+                <button onClick={onDownloadClicked} type="button" className="bg-slate-400">Download Image</button>}
         </>
     )
 }
