@@ -22,7 +22,7 @@ export default forwardRef(function PhotoPreview(props: PhotoPreviewProps, ref: R
     const hostBeautified = host
         .replace(/^samsung/g, 'Samsung')
         // remove duplicate make/model
-        .replace(/^(\w+)\s\1/g, '$1')
+        // .replace(/^(\w+)\s\1/g, '$1')
 
     return (
         <div className='max-w-3xl p-8 bg-white' ref={ref}>
