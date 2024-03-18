@@ -19,13 +19,16 @@ export default forwardRef(function PhotoPreview(props: PhotoPreviewProps, ref: R
     const shutterSpeed = props.tags.ShutterSpeedValue?.description
     const isoSpeed = props.tags.ISOSpeedRatings?.description
 
-    const hostBeautified = host.replace(/^samsung/g, 'Samsung')
+    const hostBeautified = host
+        .replace(/^samsung/g, 'Samsung')
+        // remove duplicate make/model
+        .replace(/^(\w+)\s\1/g, '$1')
 
     return (
         <div className='max-w-3xl p-8 bg-white' ref={ref}>
             <img className='w-full' src={URL.createObjectURL(props.file)} alt=""/>
             <div className='mt-3 text-center font-extralight text-lg leading-loose'>
-                {host && <h3>Shot on <strong className='font-bold'>{hostBeautified}</strong></h3>}
+                {hostBeautified && <h3>Shot on <strong className='font-bold'>{hostBeautified}</strong></h3>}
                 <p className="text-xs">
                     {focalLength && <span className='mr-2'>{focalLength}mm</span>}
                     {fNumber && <span className='mr-2'>&#119891;/{fNumber.replace(/f\//g, '')}</span>}
