@@ -31,6 +31,7 @@ export default function PhotoPicker(props: PhotoPickerProps) {
                 <input
                     type="file"
                     onChange={props.onFileChanged}
+                    onClick={(e) => { e.currentTarget.value = '' }}
                     accept="image/*,.heic,.heif"
                     id="photoFile"
                 />
