@@ -19,9 +19,11 @@ function App() {
     const canvasWrapperRef = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
+        let cancelled = false
         if (previewRef.current != null) {
             import('html2canvas').then(({default: html2canvas}) =>
                 html2canvas(previewRef.current!).then(canvas => {
+                    if (cancelled) return
                     setShowCanvas(true)
 
                     if (canvasWrapperRef.current == null) return
@@ -31,6 +33,7 @@ function App() {
                 })
             );
         }
+        return () => { cancelled = true }
     }, [photoFile]);
 
     const onFilePickerChanged = async (e: ChangeEvent<HTMLInputElement>) => {
