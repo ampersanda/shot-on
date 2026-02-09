@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
     <title>Shot On — Frame Your Shots</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -11,6 +12,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;400;700&family=Space+Grotesk:wght@500&family=Space+Mono&display=swap" rel="stylesheet">
   </head>
   <body>
+    <script>
+      (function(){var t=localStorage.getItem('theme');if(t==='dark'||(t!=='light'&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.classList.add('dark')})();
+    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
