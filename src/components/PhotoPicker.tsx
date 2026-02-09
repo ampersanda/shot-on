@@ -13,7 +13,7 @@ export default function PhotoPicker(props: PhotoPickerProps) {
             >
                 {/* Upload icon */}
                 <div className="w-16 h-16 border border-te-border flex items-center justify-center group-hover:border-te-text transition-colors">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-te-muted group-hover:text-te-text transition-colors">
+                    <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-te-muted group-hover:text-te-text transition-colors">
                         <line x1="12" y1="5" x2="12" y2="19"/>
                         <line x1="5" y1="12" x2="19" y2="12"/>
                     </svg>

@@ -24,9 +24,9 @@ export default forwardRef(function PhotoPreview(props: PhotoPreviewProps, ref: R
         .replace(/^(\w+)\s\1/g, '$1')
 
     return (
-        <div className='max-w-3xl p-8 bg-white' ref={ref}>
-            <img className='w-full' src={URL.createObjectURL(props.file)} alt=""/>
-            <div className='mt-3 text-center font-extralight text-lg leading-loose'>
+        <figure className='max-w-3xl p-8 bg-white' ref={ref}>
+            <img className='w-full' src={URL.createObjectURL(props.file)} alt="Selected photo"/>
+            <figcaption className='mt-3 text-center font-extralight text-lg leading-loose'>
                 {host && <h3>Shot on <strong className='font-bold'>{hostBeautified}</strong></h3>}
                 <p className="text-xs">
                     {focalLength && <span className='mr-2'>{focalLength}mm</span>}
@@ -34,7 +34,7 @@ export default forwardRef(function PhotoPreview(props: PhotoPreviewProps, ref: R
                     {shutterSpeed && <span className='mr-2'>{shutterSpeed}s</span>}
                     {isoSpeed && <span className='mr-2'>ISO{isoSpeed}</span>}
                 </p>
-            </div>
-        </div>
+            </figcaption>
+        </figure>
     )
 })

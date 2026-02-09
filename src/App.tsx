@@ -129,7 +129,7 @@ function App() {
                                 onClick={onDownloadClicked}
                                 className="inline-flex items-center gap-2 bg-te-text text-te-bg px-6 py-3 font-mono text-[11px] uppercase tracking-[0.15em] hover:opacity-80 transition-opacity shadow-lg"
                             >
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
                                     <polyline points="7 10 12 15 17 10"/>
                                     <line x1="12" y1="15" x2="12" y2="3"/>
@@ -140,6 +140,11 @@ function App() {
                     )}
                 </div>
             </main>
+
+            <div aria-live="polite" className="sr-only">
+                {showPreview && "Image preview ready"}
+                {showCanvas && "Framed image ready for download"}
+            </div>
 
             {/* Footer */}
             <footer className="border-t border-te-border">
