@@ -10,6 +10,8 @@ function App() {
     const [photoFile, setPhotoFile] = useState<null | File>(null)
     const [photoTags, setPhotoTags] = useState<null | ExifReader.Tags>(null)
     const [showCanvas, setShowCanvas] = useState<boolean>(false)
+    const [loading, setLoading] = useState<boolean>(false)
+    const [error, setError] = useState<string | null>(null)
 
     const showPreview = photoFile != null && photoTags != null && !showCanvas
 
@@ -35,37 +37,46 @@ function App() {
         setPhotoFile(null)
         setPhotoTags(null)
         setShowCanvas(false)
+        setError(null)
 
         if (e.target?.files?.length) {
             const file = e.target.files[0]
-            let tags = {} as ExifReader.Tags
+            setLoading(true)
 
-            const ExifReaderModule = await import('exifreader')
             try {
-                tags = await ExifReaderModule.load(file)
+                let tags = {} as ExifReader.Tags
+
+                const ExifReaderModule = await import('exifreader')
+                try {
+                    tags = await ExifReaderModule.load(file)
+                } catch {
+                    // EXIF extraction may fail for some formats (e.g. WebP)
+                }
+
+                if (file.name.toLowerCase().endsWith('.heic') ||
+                    file.name.toLowerCase().endsWith('.heif')) {
+                    const {default: heic2any} = await import('heic2any')
+                    const result = await heic2any({
+                        blob: file,
+                        toType: 'image/jpeg',
+                    })
+                    const jpegBlob = Array.isArray(result) ? result[0] : result
+                    const jpegFile = new File(
+                        [jpegBlob],
+                        file.name.replace(/\.heic|\.heif$/i, '.jpg'),
+                        {type: 'image/jpeg', lastModified: Date.now()}
+                    )
+                    setPhotoFile(jpegFile)
+                } else {
+                    setPhotoFile(file)
+                }
+
+                setPhotoTags(tags)
             } catch {
-                // EXIF extraction may fail for some formats (e.g. WebP)
+                setError('Failed to process image. Please try a different file.')
+            } finally {
+                setLoading(false)
             }
-
-            if (file.name.toLowerCase().endsWith('.heic') ||
-                file.name.toLowerCase().endsWith('.heif')) {
-                const {default: heic2any} = await import('heic2any')
-                const result = await heic2any({
-                    blob: file,
-                    toType: 'image/jpeg',
-                })
-                const jpegBlob = Array.isArray(result) ? result[0] : result
-                const jpegFile = new File(
-                    [jpegBlob],
-                    file.name.replace(/\.heic|\.heif$/i, '.jpg'),
-                    {type: 'image/jpeg', lastModified: Date.now()}
-                )
-                setPhotoFile(jpegFile)
-            } else {
-                setPhotoFile(file)
-            }
-
-            setPhotoTags(tags)
         }
     }
 
@@ -88,6 +99,8 @@ function App() {
         setPhotoFile(null)
         setPhotoTags(null)
         setShowCanvas(false)
+        setLoading(false)
+        setError(null)
     }
 
     return (
@@ -112,8 +125,30 @@ function App() {
             {/* Main */}
             <main className="flex-1 flex items-center justify-center px-6 py-12">
                 <div className="w-full max-w-[980px]">
-                    {!photoFile && !showCanvas && (
+                    {!photoFile && !showCanvas && !loading && (
                         <PhotoPicker onFileChanged={onFilePickerChanged}/>
+                    )}
+
+                    {loading && (
+                        <div className="flex flex-col items-center justify-center py-16">
+                            <p className="font-mono text-[11px] uppercase tracking-[0.15em] text-te-muted animate-pulse">
+                                processing...
+                            </p>
+                        </div>
+                    )}
+
+                    {error && (
+                        <div className="flex flex-col items-center justify-center py-16 gap-4">
+                            <p className="font-mono text-[11px] uppercase tracking-[0.15em] text-te-text">
+                                {error}
+                            </p>
+                            <button
+                                onClick={onReset}
+                                className="font-mono text-[10px] uppercase tracking-[0.15em] text-te-muted hover:text-te-text transition-colors"
+                            >
+                                try again
+                            </button>
+                        </div>
                     )}
 
                     {showPreview && (
@@ -143,6 +178,8 @@ function App() {
             </main>
 
             <div aria-live="polite" className="sr-only">
+                {loading && "Processing image"}
+                {error && error}
                 {showPreview && "Image preview ready"}
                 {showCanvas && "Framed image ready for download"}
             </div>
