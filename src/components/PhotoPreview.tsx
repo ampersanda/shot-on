@@ -11,7 +11,9 @@ export default forwardRef(function PhotoPreview(props: PhotoPreviewProps, ref: R
 
     useEffect(() => {
         const url = URL.createObjectURL(props.file)
+
         setObjectUrl(url)
+
         return () => URL.revokeObjectURL(url)
     }, [props.file])
 

@@ -20,10 +20,12 @@ function App() {
 
     useEffect(() => {
         let cancelled = false
+
         if (previewRef.current != null) {
             import('html2canvas').then(({default: html2canvas}) =>
                 html2canvas(previewRef.current!).then(canvas => {
                     if (cancelled) return
+
                     setShowCanvas(true)
 
                     if (canvasWrapperRef.current == null) return
@@ -33,6 +35,7 @@ function App() {
                 })
             );
         }
+
         return () => { cancelled = true }
     }, [photoFile]);
 
@@ -44,12 +47,13 @@ function App() {
 
         if (e.target?.files?.length) {
             const file = e.target.files[0]
+
             setLoading(true)
 
             try {
                 let tags = {} as ExifReader.Tags
-
                 const ExifReaderModule = await import('exifreader')
+
                 try {
                     tags = await ExifReaderModule.load(file)
                 } catch {
@@ -59,16 +63,19 @@ function App() {
                 if (file.name.toLowerCase().endsWith('.heic') ||
                     file.name.toLowerCase().endsWith('.heif')) {
                     const {default: heic2any} = await import('heic2any')
+
                     const result = await heic2any({
                         blob: file,
                         toType: 'image/jpeg',
                     })
+
                     const jpegBlob = Array.isArray(result) ? result[0] : result
                     const jpegFile = new File(
                         [jpegBlob],
                         file.name.replace(/\.heic|\.heif$/i, '.jpg'),
                         {type: 'image/jpeg', lastModified: Date.now()}
                     )
+
                     setPhotoFile(jpegFile)
                 } else {
                     setPhotoFile(file)
@@ -91,8 +98,10 @@ function App() {
         if (canvas != null) {
             const link = document.createElement('a')
             const baseName = (photoFile?.name ?? 'photo').replace(/\.[^.]+$/, '')
+
             link.download = `framed-${baseName}.jpg`
             link.href = canvas.toDataURL('image/jpeg', 0.95)
+
             document.body.appendChild(link)
             link.click()
             document.body.removeChild(link)
