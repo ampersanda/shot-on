@@ -35,6 +35,10 @@ export default function PhotoPicker(props: PhotoPickerProps) {
                     id="photoFile"
                 />
             </label>
+
+            <p className="font-mono text-[9px] uppercase tracking-[0.12em] text-te-muted mt-10">
+                all processing happens locally - no images are uploaded
+            </p>
         </div>
     )
 }
