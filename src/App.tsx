@@ -1,12 +1,10 @@
 import {ChangeEvent, useEffect, useRef, useState} from 'react'
-import * as ExifReader from 'exifreader'
-import heic2any from 'heic2any'
+import type * as ExifReader from 'exifreader'
 
 import 'normalize.css'
 
 import PhotoPreview from './components/PhotoPreview.tsx'
 import PhotoPicker from './components/PhotoPicker.tsx'
-import html2canvas from "html2canvas";
 
 function App() {
     const [photoFile, setPhotoFile] = useState<null | File>(null)
@@ -20,14 +18,16 @@ function App() {
 
     useEffect(() => {
         if (previewRef.current != null) {
-            html2canvas(previewRef.current).then(canvas => {
-                setShowCanvas(true)
+            import('html2canvas').then(({default: html2canvas}) =>
+                html2canvas(previewRef.current!).then(canvas => {
+                    setShowCanvas(true)
 
-                if (canvasWrapperRef.current == null) return
+                    if (canvasWrapperRef.current == null) return
 
-                canvasWrapperRef.current.innerHTML = ''
-                canvasWrapperRef.current.appendChild(canvas)
-            });
+                    canvasWrapperRef.current.innerHTML = ''
+                    canvasWrapperRef.current.appendChild(canvas)
+                })
+            );
         }
     }, [photoFile]);
 
@@ -39,14 +39,17 @@ function App() {
         if (e.target?.files?.length) {
             const file = e.target.files[0]
             let tags = {} as ExifReader.Tags
+
+            const ExifReaderModule = await import('exifreader')
             try {
-                tags = await ExifReader.load(file)
+                tags = await ExifReaderModule.load(file)
             } catch {
                 // EXIF extraction may fail for some formats (e.g. WebP)
             }
 
             if (file.name.toLowerCase().endsWith('.heic') ||
                 file.name.toLowerCase().endsWith('.heif')) {
+                const {default: heic2any} = await import('heic2any')
                 const blob = new Blob([file])
                 const jpegBlob: any = await heic2any({
                     blob,
@@ -73,7 +76,7 @@ function App() {
         if (canvas != null) {
             const link = document.createElement('a')
             link.download = `framed-${photoFile?.name}`
-            link.href = canvas.toDataURL()
+            link.href = canvas.toDataURL('image/jpeg', 0.92)
             document.body.appendChild(link)
             link.click()
             document.body.removeChild(link)
