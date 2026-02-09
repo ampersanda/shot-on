@@ -1,4 +1,4 @@
-import {ChangeEvent, useEffect, useRef, useState} from 'react'
+import {useEffect, useRef, useState} from 'react'
 import type * as ExifReader from 'exifreader'
 
 import 'normalize.css'
@@ -39,54 +39,49 @@ function App() {
         return () => { cancelled = true }
     }, [photoFile]);
 
-    const onFilePickerChanged = async (e: ChangeEvent<HTMLInputElement>) => {
+    const onFileSelected = async (file: File) => {
         setPhotoFile(null)
         setPhotoTags(null)
         setShowCanvas(false)
         setError(null)
+        setLoading(true)
 
-        if (e.target?.files?.length) {
-            const file = e.target.files[0]
-
-            setLoading(true)
+        try {
+            let tags = {} as ExifReader.Tags
+            const ExifReaderModule = await import('exifreader')
 
             try {
-                let tags = {} as ExifReader.Tags
-                const ExifReaderModule = await import('exifreader')
-
-                try {
-                    tags = await ExifReaderModule.load(file)
-                } catch {
-                    // EXIF extraction may fail for some formats (e.g. WebP)
-                }
-
-                if (file.name.toLowerCase().endsWith('.heic') ||
-                    file.name.toLowerCase().endsWith('.heif')) {
-                    const {default: heic2any} = await import('heic2any')
-
-                    const result = await heic2any({
-                        blob: file,
-                        toType: 'image/jpeg',
-                    })
-
-                    const jpegBlob = Array.isArray(result) ? result[0] : result
-                    const jpegFile = new File(
-                        [jpegBlob],
-                        file.name.replace(/\.heic|\.heif$/i, '.jpg'),
-                        {type: 'image/jpeg', lastModified: Date.now()}
-                    )
-
-                    setPhotoFile(jpegFile)
-                } else {
-                    setPhotoFile(file)
-                }
-
-                setPhotoTags(tags)
+                tags = await ExifReaderModule.load(file)
             } catch {
-                setError('Failed to process image. Please try a different file.')
-            } finally {
-                setLoading(false)
+                // EXIF extraction may fail for some formats (e.g. WebP)
             }
+
+            if (file.name.toLowerCase().endsWith('.heic') ||
+                file.name.toLowerCase().endsWith('.heif')) {
+                const {default: heic2any} = await import('heic2any')
+
+                const result = await heic2any({
+                    blob: file,
+                    toType: 'image/jpeg',
+                })
+
+                const jpegBlob = Array.isArray(result) ? result[0] : result
+                const jpegFile = new File(
+                    [jpegBlob],
+                    file.name.replace(/\.heic|\.heif$/i, '.jpg'),
+                    {type: 'image/jpeg', lastModified: Date.now()}
+                )
+
+                setPhotoFile(jpegFile)
+            } else {
+                setPhotoFile(file)
+            }
+
+            setPhotoTags(tags)
+        } catch {
+            setError('Failed to process image. Please try a different file.')
+        } finally {
+            setLoading(false)
         }
     }
 
@@ -133,7 +128,7 @@ function App() {
             <main className="flex-1 flex items-center justify-center px-6 py-12">
                 <div className="w-full max-w-[980px]">
                     {!photoFile && !showCanvas && !loading && (
-                        <PhotoPicker onFileChanged={onFilePickerChanged}/>
+                        <PhotoPicker onFileSelected={onFileSelected}/>
                     )}
 
                     {loading && (
