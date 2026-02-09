@@ -20,10 +20,17 @@ function App() {
 
     useEffect(() => {
         let cancelled = false
+        const preview = previewRef.current
 
-        if (previewRef.current != null) {
+        if (preview == null) return
+
+        const img = preview.querySelector('img')
+
+        const capture = () => {
+            if (cancelled) return
+
             import('html2canvas').then(({default: html2canvas}) =>
-                html2canvas(previewRef.current!).then(canvas => {
+                html2canvas(preview).then(canvas => {
                     if (cancelled) return
 
                     setShowCanvas(true)
@@ -36,7 +43,16 @@ function App() {
             );
         }
 
-        return () => { cancelled = true }
+        if (!img || img.complete) {
+            capture()
+        } else {
+            img.addEventListener('load', capture)
+        }
+
+        return () => {
+            cancelled = true
+            img?.removeEventListener('load', capture)
+        }
     }, [photoFile]);
 
     const onFileSelected = async (file: File) => {
