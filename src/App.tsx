@@ -87,8 +87,9 @@ function App() {
 
         if (canvas != null) {
             const link = document.createElement('a')
-            link.download = `framed-${photoFile?.name}`
-            link.href = canvas.toDataURL()
+            const baseName = (photoFile?.name ?? 'photo').replace(/\.[^.]+$/, '')
+            link.download = `framed-${baseName}.jpg`
+            link.href = canvas.toDataURL('image/jpeg', 0.95)
             document.body.appendChild(link)
             link.click()
             document.body.removeChild(link)
