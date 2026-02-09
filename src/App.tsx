@@ -116,20 +116,25 @@ function App() {
                         <PhotoPreview file={photoFile} tags={photoTags} ref={previewRef}/>
                     )}
 
-                    <div className={`flex flex-col items-center gap-8 ${showCanvas ? '' : 'hidden'}`}>
-                        <div ref={canvasWrapperRef} className="max-w-3xl w-full"></div>
-                        <button
-                            onClick={onDownloadClicked}
-                            className="inline-flex items-center gap-2 bg-te-text text-te-bg px-6 py-3 font-mono text-[11px] uppercase tracking-[0.15em] hover:opacity-80 transition-opacity"
-                        >
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                                <polyline points="7 10 12 15 17 10"/>
-                                <line x1="12" y1="15" x2="12" y2="3"/>
-                            </svg>
-                            download
-                        </button>
+                    <div className={`flex flex-col items-center ${showCanvas ? '' : 'hidden'}`}>
+                        <div ref={canvasWrapperRef} className="max-w-3xl w-full pb-20"></div>
                     </div>
+
+                    {showCanvas && (
+                        <div className="fixed bottom-6 left-0 right-0 flex justify-center z-10">
+                            <button
+                                onClick={onDownloadClicked}
+                                className="inline-flex items-center gap-2 bg-te-text text-te-bg px-6 py-3 font-mono text-[11px] uppercase tracking-[0.15em] hover:opacity-80 transition-opacity shadow-lg"
+                            >
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                    <polyline points="7 10 12 15 17 10"/>
+                                    <line x1="12" y1="15" x2="12" y2="3"/>
+                                </svg>
+                                download
+                            </button>
+                        </div>
+                    )}
                 </div>
             </main>
 
@@ -140,7 +145,7 @@ function App() {
                         frame your shots
                     </span>
                     <span className="font-mono text-[10px] text-te-muted">
-                        v1.0
+                        v1.1
                     </span>
                 </div>
             </footer>
