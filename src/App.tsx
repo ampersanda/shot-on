@@ -50,16 +50,17 @@ function App() {
             if (file.name.toLowerCase().endsWith('.heic') ||
                 file.name.toLowerCase().endsWith('.heif')) {
                 const {default: heic2any} = await import('heic2any')
-                const blob = new Blob([file])
-                const jpegBlob: any = await heic2any({
-                    blob,
+                const result = await heic2any({
+                    blob: file,
                     toType: 'image/jpeg',
                 })
-
-                jpegBlob.lastModifiedDate = new Date()
-                jpegBlob.name = `${file.name}.jpg`
-
-                setPhotoFile(jpegBlob as File)
+                const jpegBlob = Array.isArray(result) ? result[0] : result
+                const jpegFile = new File(
+                    [jpegBlob],
+                    file.name.replace(/\.heic|\.heif$/i, '.jpg'),
+                    {type: 'image/jpeg', lastModified: Date.now()}
+                )
+                setPhotoFile(jpegFile)
             } else {
                 setPhotoFile(file)
             }
