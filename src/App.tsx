@@ -124,14 +124,8 @@ function App() {
                     <h1 className="font-display text-sm font-medium tracking-tight text-te-text uppercase">
                         shot on
                     </h1>
-                    {showCanvas && (
-                        <button
-                            onClick={onReset}
-                            className="font-mono text-[10px] uppercase tracking-[0.15em] text-te-muted hover:text-te-text transition-colors"
-                        >
-                            new frame
-                        </button>
-                    )}
+                    {/* spacer to keep title centered */}
+                    <div className="w-0"/>
                 </div>
             </header>
 
@@ -173,7 +167,14 @@ function App() {
                     </div>
 
                     {showCanvas && (
-                        <div className="fixed bottom-6 left-0 right-0 flex justify-center z-10">
+                        <div className="fixed bottom-6 left-0 right-0 flex justify-center gap-3 z-10">
+                            <button
+                                onClick={onReset}
+                                className="inline-flex items-center gap-2 bg-te-bg text-te-text border border-te-border px-6 py-3 font-mono text-[11px] uppercase tracking-[0.15em] hover:border-te-text transition-colors shadow-lg"
+                            >
+                                reset
+                            </button>
+
                             <button
                                 onClick={onDownloadClicked}
                                 className="inline-flex items-center gap-2 bg-te-text text-te-bg px-6 py-3 font-mono text-[11px] uppercase tracking-[0.15em] hover:opacity-80 transition-opacity shadow-lg"
