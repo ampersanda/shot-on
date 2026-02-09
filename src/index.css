@@ -13,6 +13,34 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+body {
+  background: #e8e8e8;
+  color: #0f0e12;
+  margin: 0;
+}
+
 #root {
-  background: white;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* file input reset */
+input[type="file"] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* canvas border override for exported image */
+canvas {
+  display: block;
+  max-width: 100%;
+  height: auto;
 }
