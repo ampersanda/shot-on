@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :focus-visible {
-  outline: 2px solid #0f0e12;
+  outline: 2px solid var(--te-text);
   outline-offset: 2px;
 }
 
@@ -20,6 +20,13 @@
 }
 
 :root {
+  --te-bg: #e8e8e8;
+  --te-surface: #f2f2f2;
+  --te-text: #0f0e12;
+  --te-muted: #505050;
+  --te-border: #d0d0d0;
+  --te-accent: #0f0e12;
+
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
@@ -30,9 +37,18 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.dark {
+  --te-bg: #1a1a1a;
+  --te-surface: #242424;
+  --te-text: #e8e8e8;
+  --te-muted: #a0a0a0;
+  --te-border: #333333;
+  --te-accent: #e8e8e8;
+}
+
 body {
-  background: #e8e8e8;
-  color: #0f0e12;
+  background: var(--te-bg);
+  color: var(--te-text);
   margin: 0;
 }
 
