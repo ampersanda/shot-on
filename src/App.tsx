@@ -38,7 +38,7 @@ function App() {
 
         if (e.target?.files?.length) {
             const file = e.target.files[0]
-            let tags: ExifReader.Tags = {}
+            let tags = {} as ExifReader.Tags
             try {
                 tags = await ExifReader.load(file)
             } catch {
