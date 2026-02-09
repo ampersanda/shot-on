@@ -1,5 +1,5 @@
 import * as ExifReader from 'exifreader';
-import React, {forwardRef} from 'react';
+import React, {forwardRef, useEffect, useState} from 'react';
 
 type PhotoPreviewProps = React.HTMLAttributes<HTMLDivElement> & {
     file: File,
@@ -7,6 +7,14 @@ type PhotoPreviewProps = React.HTMLAttributes<HTMLDivElement> & {
 }
 
 export default forwardRef(function PhotoPreview(props: PhotoPreviewProps, ref: React.ForwardedRef<HTMLDivElement>) {
+    const [objectUrl, setObjectUrl] = useState<string>('')
+
+    useEffect(() => {
+        const url = URL.createObjectURL(props.file)
+        setObjectUrl(url)
+        return () => URL.revokeObjectURL(url)
+    }, [props.file])
+
     const makerModel = [props.tags.Make?.description, props.tags.Model?.description]
         .filter((host) => host != undefined)
 
@@ -25,7 +33,7 @@ export default forwardRef(function PhotoPreview(props: PhotoPreviewProps, ref: R
 
     return (
         <figure className='max-w-3xl p-8 bg-white' ref={ref}>
-            <img className='w-full' src={URL.createObjectURL(props.file)} alt="Selected photo"/>
+            {objectUrl && <img className='w-full' src={objectUrl} alt="Selected photo"/>}
             <figcaption className='mt-3 text-center font-extralight text-lg leading-loose'>
                 {host && <h3>Shot on <strong className='font-bold'>{hostBeautified}</strong></h3>}
                 <p className="text-xs">
