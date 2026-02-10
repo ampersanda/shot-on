@@ -11,11 +11,15 @@ export default forwardRef(function PhotoPreview(props: PhotoPreviewProps, ref: R
 
     useEffect(() => () => URL.revokeObjectURL(objectUrl), [objectUrl])
 
-    const makerModel = [props.tags.Make?.description, props.tags.Model?.description]
-        .filter((host) => host != undefined)
+    const make = props.tags.Make?.description
+    const model = props.tags.Model?.description
+
+    const makerModel = make && model && model.toLowerCase().startsWith(make.split(/[\s,]/)[0].toLowerCase())
+        ? model
+        : [make, model].filter(Boolean).join(' ')
 
     const host = props.tags.HostComputer?.description ??
-        (makerModel.length > 0 ? makerModel.join(' ') :
+        (makerModel.length > 0 ? makerModel :
             props.tags['Device Manufacturer']?.description)
 
     const focalLength = props.tags.FocalLengthIn35mmFilm?.description?.toString()
