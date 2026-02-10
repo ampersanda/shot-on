@@ -240,7 +240,7 @@ function App() {
                         frame your shots
                     </span>
                     <span className="font-mono text-[10px] text-te-muted">
-                        v1.1
+                        v{APP_VERSION}
                     </span>
                 </div>
             </footer>
