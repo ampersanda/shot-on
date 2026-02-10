@@ -19,7 +19,10 @@ export default forwardRef(function PhotoPreview(props: PhotoPreviewProps, ref: R
             props.tags['Device Manufacturer']?.description)
 
     const focalLength = props.tags.FocalLengthIn35mmFilm?.description?.toString()
-    const fNumber = props.tags.FNumber?.description
+    const fNumberRaw = props.tags.FNumber?.description?.replace(/f\//g, '')
+    const fNumber = fNumberRaw && !isNaN(Number(fNumberRaw))
+        ? parseFloat(Number(fNumberRaw).toFixed(2)).toString()
+        : fNumberRaw
     const shutterSpeed = props.tags.ShutterSpeedValue?.description
     const isoSpeed = props.tags.ISOSpeedRatings?.description
 
@@ -34,7 +37,7 @@ export default forwardRef(function PhotoPreview(props: PhotoPreviewProps, ref: R
                 {host && <h3>Shot on <strong className='font-bold'>{hostBeautified}</strong></h3>}
                 <p className="text-xs">
                     {focalLength && <span className='mr-2'>{focalLength}mm</span>}
-                    {fNumber && <span className='mr-2'>&#119891;/{fNumber.replace(/f\//g, '')}</span>}
+                    {fNumber && <span className='mr-2'>&#119891;/{fNumber}</span>}
                     {shutterSpeed && <span className='mr-2'>{shutterSpeed}s</span>}
                     {isoSpeed && <span className='mr-2'>ISO{isoSpeed}</span>}
                 </p>
