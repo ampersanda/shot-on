@@ -10,7 +10,6 @@ import useTheme from './hooks/useTheme.ts'
 function App() {
     const {resolved: theme, toggle: toggleTheme} = useTheme()
 
-    const [padding, setPadding] = useState(32)
     const [photoFile, setPhotoFile] = useState<null | File>(null)
     const [photoTags, setPhotoTags] = useState<null | ExifReader.Tags>(null)
     const [showCanvas, setShowCanvas] = useState<boolean>(false)
@@ -21,7 +20,6 @@ function App() {
 
     const previewRef = useRef<HTMLDivElement>(null)
     const canvasWrapperRef = useRef<HTMLDivElement>(null)
-    const dialogRef = useRef<HTMLDialogElement>(null)
 
     useEffect(() => {
         let cancelled = false
@@ -140,42 +138,29 @@ function App() {
                     <h1 className="font-display text-sm font-medium tracking-tight text-te-text uppercase">
                         shot on
                     </h1>
-                    <div className="flex items-center gap-2">
-                        <button
-                            onClick={toggleTheme}
-                            aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
-                            className="w-8 h-8 flex items-center justify-center border border-te-border text-te-text hover:border-te-text transition-colors"
-                        >
-                            {theme === 'dark' ? (
-                                <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                                    <circle cx="12" cy="12" r="5"/>
-                                    <line x1="12" y1="1" x2="12" y2="3"/>
-                                    <line x1="12" y1="21" x2="12" y2="23"/>
-                                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
-                                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-                                    <line x1="1" y1="12" x2="3" y2="12"/>
-                                    <line x1="21" y1="12" x2="23" y2="12"/>
-                                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
-                                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-                                </svg>
-                            ) : (
-                                <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-                                </svg>
-                            )}
-                        </button>
-
-                        <button
-                            onClick={() => dialogRef.current?.showModal()}
-                            aria-label="Settings"
-                            className="w-8 h-8 flex items-center justify-center border border-te-border text-te-text hover:border-te-text transition-colors"
-                        >
+                    <button
+                        onClick={toggleTheme}
+                        aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+                        className="w-8 h-8 flex items-center justify-center border border-te-border text-te-text hover:border-te-text transition-colors"
+                    >
+                        {theme === 'dark' ? (
                             <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                                <circle cx="12" cy="12" r="3"/>
-                                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                                <circle cx="12" cy="12" r="5"/>
+                                <line x1="12" y1="1" x2="12" y2="3"/>
+                                <line x1="12" y1="21" x2="12" y2="23"/>
+                                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                                <line x1="1" y1="12" x2="3" y2="12"/>
+                                <line x1="21" y1="12" x2="23" y2="12"/>
+                                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
                             </svg>
-                        </button>
-                    </div>
+                        ) : (
+                            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                            </svg>
+                        )}
+                    </button>
                 </div>
             </header>
 
@@ -209,7 +194,7 @@ function App() {
                     )}
 
                     {showPreview && (
-                        <PhotoPreview file={photoFile} tags={photoTags} padding={padding} ref={previewRef}/>
+                        <PhotoPreview file={photoFile} tags={photoTags} ref={previewRef}/>
                     )}
 
                     <div className={`flex flex-col items-center ${showCanvas ? '' : 'hidden'}`}>
@@ -247,42 +232,6 @@ function App() {
                 {showPreview && "Image preview ready"}
                 {showCanvas && "Framed image ready for download"}
             </div>
-
-            {/* Settings dialog */}
-            <dialog
-                ref={dialogRef}
-                onClick={(e) => { if (e.target === e.currentTarget) dialogRef.current?.close() }}
-                className="backdrop:bg-black/50 bg-te-bg border border-te-border p-6 max-w-xs w-full"
-            >
-                <div className="flex flex-col gap-4">
-                    <h2 className="font-mono text-[11px] uppercase tracking-[0.15em] text-te-text">
-                        settings
-                    </h2>
-
-                    <label className="flex flex-col gap-2">
-                        <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-te-muted">
-                            padding: {padding}px
-                        </span>
-
-                        <input
-                            type="range"
-                            min={0}
-                            max={64}
-                            step={4}
-                            value={padding}
-                            onChange={(e) => setPadding(Number(e.target.value))}
-                            className="w-full accent-te-text"
-                        />
-                    </label>
-
-                    <button
-                        onClick={() => dialogRef.current?.close()}
-                        className="font-mono text-[10px] uppercase tracking-[0.15em] text-te-muted hover:text-te-text transition-colors self-end"
-                    >
-                        close
-                    </button>
-                </div>
-            </dialog>
 
             {/* Footer */}
             <footer className="border-t border-te-border">
