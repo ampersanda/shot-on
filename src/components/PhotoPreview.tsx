@@ -1,5 +1,5 @@
 import * as ExifReader from 'exifreader';
-import React, {forwardRef, useEffect, useMemo} from 'react';
+import React, {forwardRef, useEffect, useState} from 'react';
 
 type PhotoPreviewProps = React.HTMLAttributes<HTMLDivElement> & {
     file: File,
@@ -7,9 +7,14 @@ type PhotoPreviewProps = React.HTMLAttributes<HTMLDivElement> & {
 }
 
 export default forwardRef(function PhotoPreview(props: PhotoPreviewProps, ref: React.ForwardedRef<HTMLDivElement>) {
-    const objectUrl = useMemo(() => URL.createObjectURL(props.file), [props.file])
+    const [objectUrl, setObjectUrl] = useState<string | null>(null)
 
-    useEffect(() => () => URL.revokeObjectURL(objectUrl), [objectUrl])
+    useEffect(() => {
+        const url = URL.createObjectURL(props.file)
+        setObjectUrl(url)
+
+        return () => URL.revokeObjectURL(url)
+    }, [props.file])
 
     const make = props.tags.Make?.description
     const model = props.tags.Model?.description
