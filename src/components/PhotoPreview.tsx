@@ -3,7 +3,8 @@ import React, {forwardRef, useEffect, useState} from 'react';
 
 type PhotoPreviewProps = React.HTMLAttributes<HTMLDivElement> & {
     file: File,
-    tags: ExifReader.Tags
+    tags: ExifReader.Tags,
+    padding?: number
 }
 
 export default forwardRef(function PhotoPreview(props: PhotoPreviewProps, ref: React.ForwardedRef<HTMLDivElement>) {
@@ -40,7 +41,7 @@ export default forwardRef(function PhotoPreview(props: PhotoPreviewProps, ref: R
         .replace(/^(\w+)\s\1/g, '$1')
 
     return (
-        <figure className='max-w-3xl p-8 bg-white text-black' ref={ref}>
+        <figure className='max-w-3xl bg-white text-black' style={{padding: props.padding ?? 32}} ref={ref}>
             {objectUrl && <img className='w-full' src={objectUrl} alt="Selected photo"/>}
             <figcaption className='mt-3 text-center font-extralight text-lg leading-loose'>
                 {host && <h3>Shot on <strong className='font-bold'>{hostBeautified}</strong></h3>}
