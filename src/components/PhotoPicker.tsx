@@ -54,7 +54,7 @@ export default function PhotoPicker(props: PhotoPickerProps) {
                         select or drop image
                     </p>
                     <p className="font-mono text-[10px] uppercase tracking-[0.15em] text-te-muted mt-2">
-                        jpg, png, heic
+                        jpg, png, heic, webp
                     </p>
                 </div>
 
@@ -68,7 +68,7 @@ export default function PhotoPicker(props: PhotoPickerProps) {
                         }
                     }}
                     onClick={(e) => { e.currentTarget.value = '' }}
-                    accept="image/*,.heic,.heif"
+                    accept="image/*,.heic,.heif,.webp"
                     id="photoFile"
                 />
             </label>
